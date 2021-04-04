@@ -12,9 +12,12 @@
 
 <body class="container">
     <header>
-        <h1 class="display-4">
-            <%= data.title %>
-        </h1>
+        <form action="/image" method="post" enctype="multipart/form-data">
+            画像ファイル選択<br>
+            <input type="file" name="file">
+            <br>
+            <input type="submit" name="botan" value="送信">
+        </form>
     </header>
     <div role="main">
         <div class="data-form">

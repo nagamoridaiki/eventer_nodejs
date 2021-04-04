@@ -43,5 +43,6 @@ app.use(bodyParser.json());
 
 app.use('/', indexRouter);
 //app.use('/boards', boardsRouter);
+app.use(express.static(path.join(__dirname, 'public')))
 
 module.exports = app;

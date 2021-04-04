@@ -6,3 +6,4 @@ mysql/mysql.env
 app.env
 node_modules/
 package-lock.json
+src/public/images/

@@ -5,6 +5,7 @@ const jsonWebToken = require('jsonwebtoken')
 const db = require('../models/index')
 const httpStatus = require('http-status');
 const process = require('../config/process.js');
+const multer = require('multer');
 
 
 module.exports = {
@@ -126,6 +127,16 @@ module.exports = {
             }
             res.render('layout', { layout_name: 'myprof', data });
         })
-
+    },
+    imagePost: async(req, res, next) => {
+        const upload = multer({ dest: '../public/images/' });
+        await upload.single('file')
+            .then(() => {
+                res.redirect('/')
+            }).catch(
+                error => {
+                    res.render('layout', { layout_name: 'error', title: 'ERROR', msg: error });
+                }
+            )
     }
 }
