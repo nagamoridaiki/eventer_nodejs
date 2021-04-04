@@ -6,6 +6,7 @@ const eventsController = require('../controllers/eventsController');
 const multer = require('multer')
 
 
+router.get('/', usersController.verifyJWT, eventsController.index);
 router.get('/add', usersController.verifyJWT, eventsController.add);
 router.post('/add', usersController.verifyJWT, eventsController.create);
 

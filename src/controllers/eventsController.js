@@ -9,6 +9,17 @@ const process = require('../config/process.js');
 const multer = require('multer')
 
 module.exports = {
+    index: (req, res, next) => {
+        db.Event.findAll()
+            .then(async(event) => {
+                const data = {
+                    title: 'Event',
+                    login: req.session.user,
+                    content: event,
+                }
+                res.render('layout', { layout_name: 'events/list', data });
+            });
+    },
     add: (req, res, next) => {
         const data = {
             title: 'Events/Add',
