@@ -2,6 +2,7 @@ const express = require('express');
 const { use } = require('../app');
 const router = express.Router();
 const usersController = require('../controllers/usersController');
+const eventsController = require('../controllers/eventsController');
 const multer = require('multer')
 
 const storage = multer.diskStorage({
@@ -26,7 +27,8 @@ router.get('/', usersController.verifyJWT, usersController.index, usersControlle
 router.get('/logout', usersController.logout)
 router.get('/user/:id', usersController.verifyJWT, usersController.myProf);
 router.post('/image', usersController.verifyJWT, upload.single('file'), usersController.imageUpload)
+router.get('/add', usersController.verifyJWT, eventsController.add);
 
-
+//router.post('/add', usersController.verifyJWT, eventsController.create);
 
 module.exports = router;

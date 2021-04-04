@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const indexRouter = require('./routes/index');
-//const boardsRouter = require('./routes/boards');
+const eventsRouter = require('./routes/events');
 const session = require('express-session');
 //const connectFlash = require("connect-flash");
 const layouts = require("express-ejs-layouts");
@@ -42,7 +42,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/', indexRouter);
-//app.use('/boards', boardsRouter);
+app.use('/events', eventsRouter);
+
 app.use(express.static(path.join(__dirname, 'public')))
 
 module.exports = app;
