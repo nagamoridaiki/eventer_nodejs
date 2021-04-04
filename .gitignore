@@ -1,0 +1,8 @@
+.devcontainer
+src/bin
+src/node_modules
+src/package-lock.json
+mysql/mysql.env
+app.env
+node_modules/
+package-lock.json
