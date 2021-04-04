@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
         cb(null, './public/images/')
     },
     filename: function(req, file, cb) {
-        cb(null, 'image.jpg')
+        cb(null, req.session.user.id + req.session.user.name + ".jpg")
     }
 })
 const upload = multer({ storage: storage })
@@ -25,13 +25,7 @@ router.post('/delete/', usersController.verifyJWT, usersController.delete, users
 router.get('/', usersController.verifyJWT, usersController.index, usersController.indexView);
 router.get('/logout', usersController.logout)
 router.get('/user/:id', usersController.verifyJWT, usersController.myProf);
-
-
-//router.post('/image', usersController.verifyJWT, usersController.imagePost);
-
-router.post('/image', upload.single('file'), function(req, res) {
-    res.send('ファイルのアップロードが完了しました。');
-})
+router.post('/image', usersController.verifyJWT, upload.single('file'), usersController.imageUpload)
 
 
 

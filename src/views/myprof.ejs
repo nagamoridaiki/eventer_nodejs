@@ -13,7 +13,9 @@
 <body class="container">
     <header>
         <form action="/image" method="post" enctype="multipart/form-data">
-            画像ファイル選択<br>
+            <img src="/images/<%= data.user.image %>" width="10%" height="10%" />
+            <br> 画像ファイル選択
+            <br>
             <input type="file" name="file">
             <br>
             <input type="submit" name="botan" value="送信">

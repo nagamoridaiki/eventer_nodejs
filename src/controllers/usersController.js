@@ -5,7 +5,17 @@ const jsonWebToken = require('jsonwebtoken')
 const db = require('../models/index')
 const httpStatus = require('http-status');
 const process = require('../config/process.js');
-const multer = require('multer');
+const multer = require('multer')
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function(req, file, cb) {
+        cb(null, 'image.jpg')
+    }
+})
+const upload = multer({ storage: storage })
 
 
 module.exports = {
@@ -122,21 +132,24 @@ module.exports = {
             //取得したuser情報をもとに画面にレンダリング
             const data = {
                 title: 'マイプロフィール',
-                user: req.session.user,
+                user: user,
                 err: null
             }
             res.render('layout', { layout_name: 'myprof', data });
         })
     },
-    imagePost: async(req, res, next) => {
-        const upload = multer({ dest: '../public/images/' });
-        await upload.single('file')
+    imageUpload: async(req, res, next) => {
+        const UserId = req.session.user.id;
+        await db.User.update({
+                image: req.session.user.id + req.session.user.name + ".jpg",
+            }, {
+                where: { id: UserId, }
+            })
             .then(() => {
-                res.redirect('/')
-            }).catch(
-                error => {
-                    res.render('layout', { layout_name: 'error', title: 'ERROR', msg: error });
-                }
-            )
+                res.redirect('/user/' + UserId)
+            })
+            .catch((err) => {
+                res.render('layout', { layout_name: 'error', title: 'ERROR', msg: err });
+            })
     }
 }
