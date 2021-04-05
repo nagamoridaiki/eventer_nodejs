@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>
+        <%= data.title %>
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body class="container">
+    <header>
+        <h1 class="display-4">
+            <%= data.title %>
+        </h1>
+    </header>
+    <div role="main">
+        <p class="h4">Welcome to
+            <%= data.login.name %>.</p>
+        <% if (data.err!=null) { for (let i in data.err.errors) { %>
+            <li>
+                <%= data.err.errors[i].message %>
+            </li>
+            <% }} %>
+                <form method="post" action="/events/update/<%= data.event.id %>">
+                    <div class="row">
+                        <div class="col-10  input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">タイトル</span>
+                            </div>
+                            <input type="text" name="title" value="<%= data.event.title %>" class="form-control">
+                            <ul class="text-danger">
+                                <% if (data.err!=null) { for (let i in data.err.get("title")) { %>
+                                    <li>
+                                        <%= data.err.get("title")[i].message %>
+                                    </li>
+                                <% }} %>
+                            </ul>
+                        </div>
+                        <div class="col-10 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">本文</span>
+                            </div>
+                            <textarea type="text" name="msg" class="form-control" rows="10"><%= data.event.detail %></textarea>
+                            <ul class="text-danger">
+                                <% if (data.err!=null) { for (let i in data.err.get("detail")) { %>
+                                    <li>
+                                        <%= data.err.get("detail")[i].detail %>
+                                    </li>
+                                <% }} %>
+                            </ul>
+                        </div>
+                        <div>
+                            <input type="submit" value="送信" class="btn btn-primary col-2">
+                        </div>
+                    </div>
+                </form>
+                <%if (data.isJoin == true) {%>
+                    <form method="post" action="/events/join">
+                        <input type="hidden" name="userId" value="<%= data.login.id %>">
+                        <input type="hidden" name="eventId" value="<%= data.event.id %>">
+                        <input class="btn btn-primary" type="submit" value="参加しない">
+                    </form>
+                <% } %>
+                <%if (data.isJoin == false) {%>
+                    <form method="post" action="/events/join">
+                        <input type="hidden" name="userId" value="<%= data.login.id %>">
+                        <input type="hidden" name="eventId" value="<%= data.event.id %>">
+                        <input class="btn btn-success" type="submit" value="参加する">
+                    </form>
+                <% } %>
+    </div>
+
+    <p class="h5"><a href="/events">＜＜掲示板リストに戻る</a></p>
+</body>
+
+</html>

@@ -55,5 +55,12 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Event',
     });
+    Event.associate = function(models) {
+        Event.belongsToMany(models.User, {
+            through: 'Join',
+            as: 'User',
+            foreignKey: 'eventId'
+        });
+    };
     return Event;
 };

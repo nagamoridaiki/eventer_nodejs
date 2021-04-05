@@ -29,10 +29,32 @@
                         <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap"><title>Placeholder</title><rect fill="#868e96" width="100%" height="100%"/><text fill="#dee2e6" dy=".3em" x="50%" y="50%">Image cap</text></svg>
                         <div class="card-body">
                             <h5 class="card-title">
-                                <%= data.content[i].title %>
+                                <a href="events/show/<%= data.content[i].id %>">
+                                    <%= data.content[i].title %>
+                                </a>
                             </h5>
                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <% 
+                            hart_color = false;
+                            for(let n in data.content[i].User) { 
+                                if (data.content[i].User[n].id == data.login.id){
+                                    hart_color = true;
+                                };
+                            };
+                                %>
+                                <%if (hart_color == true) {%>
+                                    <p>参加人数:参加してます
+                                        <%= data.content[i].User.length %>
+                                    </p>
+                                    <% } %>
+                                        <%if (hart_color == false) {%>
+                                            <p>参加人数:参加してません
+                                                <%= data.content[i].User.length %>
+                                            </p>
+                                            <% } %>
+
+
+                                                <a href="#" class="btn btn-primary">Go somewhere</a>
                         </div>
                     </div>
                 </div>
