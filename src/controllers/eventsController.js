@@ -35,6 +35,11 @@ module.exports = {
         res.render('layout', { layout_name: 'events/add', data });
     },
     create: (req, res, next) => {
+        let tags = JSON.parse(req.body.tags);
+        tags.forEach(function(value, key ) {
+            console.log( value.value );
+
+        })
         const form = {
             userId: req.session.user.id,
             title: req.body.title,

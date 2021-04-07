@@ -8,6 +8,9 @@
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="container">
@@ -52,6 +55,13 @@
                                     <% }} %>
                             </ul>
                         </div>
+                        <div class="col-10 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">タグ</span>
+                            </div>
+                            <input name='tags' class='form-control' placeholder='write some tags' value='' autofocus>
+
+                        </div>
                         <div>
                             <input type="submit" value="送信" class="btn btn-primary col-2">
                         </div>
@@ -59,5 +69,39 @@
                 </form>
     </div>
 </body>
+<script>
+    const input = document.querySelector('input[name=tags]'),
+        // init Tagify script on the above inputs
+        tagify = new Tagify(input, {
+            whitelist : ["A# .NET", "A# (Axiom)"],
+            blacklist : ["react", "angular"]
+        });
+    
+    // "remove all tags" button event listener
+    document.querySelector('.tags--removeAllBtn')
+        .addEventListener('click', tagify.removeAllTags.bind(tagify))
+    
+    // Chainable event listeners
+    tagify.on('add', onAddTag)
+          .on('remove', onRemoveTag)
+          .on('invalid', onInvalidTag);
+    
+    // tag added callback
+    function onAddTag(e){
+        console.log(e, e.detail);
+        console.log( tagify.DOM.originalInput.value )
+        tagify.off('add', onAddTag) // exmaple of removing a custom Tagify event
+    }
+    
+    // tag remvoed callback
+    function onRemoveTag(e){
+        console.log(e, e.detail);
+    }
+    
+    // invalid tag added callback
+    function onInvalidTag(e){
+        console.log(e, e.detail);
+    }
+</script>
 
 </html>
