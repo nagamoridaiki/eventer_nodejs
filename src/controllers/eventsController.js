@@ -3,6 +3,8 @@
 const User = require("../models/user")
 const Event = require("../models/event")
 const Join = require("../models/join")
+const Tag = require("../models/tag")
+const EventTag = require("../models/eventtag")
 const jsonWebToken = require('jsonwebtoken')
 const db = require('../models/index')
 const httpStatus = require('http-status');
@@ -34,31 +36,39 @@ module.exports = {
         }
         res.render('layout', { layout_name: 'events/add', data });
     },
-    create: (req, res, next) => {
-        let tags = JSON.parse(req.body.tags);
-        tags.forEach(function(value, key ) {
-            console.log( value.value );
-
-        })
-        const form = {
-            userId: req.session.user.id,
-            title: req.body.title,
-            detail: req.body.detail,
-        };
-        db.sequelize.sync()
-            .then(() => db.Event.create(form)
-                .then(brd => {
-                    res.redirect('/');
-                })
-                .catch((err) => {
-                    const data = {
-                        title: 'events',
-                        login: req.session.user,
-                        err: err,
-                    }
-                    res.render('layout', { layout_name: 'events/add', data });
-                })
+    create: async(req, res, next) => {
+        //イベント作成
+        const newEvent = await db.sequelize.sync()
+            .then(() => db.Event.create({
+                    userId: req.session.user.id,
+                    title: req.body.title,
+                    detail: req.body.detail,
+                }).catch((err) => {
+                        const data = {
+                            title: 'events',
+                            login: req.session.user,
+                            err: err,
+                        }
+                        res.render('layout', { layout_name: 'events/add', data });
+                    })
             )
+        //タグ作成およびイベントとの紐付け
+        let tags = JSON.parse(req.body.tags);
+        //tagの数だけ繰り返す
+        tags.forEach(async function(tag, key ) {
+            let findTag = await db.Tag.findOrCreate({
+                where: { name: tag.value }
+            }).catch((err) => {
+                res.render('layout', { layout_name: 'error', title: 'ERROR', msg: err });
+            })
+            //イベントとの紐付け
+            db.EventTag.create({
+                eventId: newEvent.id,
+                tagId: findTag[0].id,
+            }).catch((err) => {
+                res.render('layout', { layout_name: 'error', title: 'ERROR', msg: err });
+            })
+        })
     },
     show: async(req, res, next) => {
         const EventId = req.params.id;
