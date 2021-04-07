@@ -61,6 +61,11 @@ module.exports = (sequelize, DataTypes) => {
             as: 'User',
             foreignKey: 'eventId'
         });
+        Event.belongsToMany(models.Tag, {
+            through: 'EventTag',
+            as: 'Tag',
+            foreignKey: 'eventId'
+        });
     };
     return Event;
 };

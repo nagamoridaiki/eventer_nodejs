@@ -14,7 +14,7 @@ const multer = require('multer')
 module.exports = {
     index: (req, res, next) => {
         db.Event.findAll({
-                include: 'User',
+                include: ['User', 'Tag'],
                 order: [
                     ['id', 'DESC']
                 ],
@@ -76,8 +76,10 @@ module.exports = {
             where: {
                 id: EventId,
             },
-            include: 'User'
+            include: ['User', 'Tag'],
+            
         }).then(event => {
+            console.log(event)
             let isJoin = false;
             const joinUser = event.User;
             //あなたはそのイベントに参加予定か？

@@ -14,8 +14,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   EventTag.init({
-    eventId: DataTypes.INTEGER,
-    tagId: DataTypes.INTEGER
+    eventId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+          model: 'Event',
+          key: 'id'
+      }
+  },
+    tagId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+          model: 'Tag',
+          key: 'id'
+      }
+  }
   }, {
     sequelize,
     modelName: 'EventTag',
