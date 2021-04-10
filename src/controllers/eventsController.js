@@ -38,13 +38,10 @@ module.exports = {
     },
     create: async(req, res, next) => {
         //イベント作成
-        const newEvent = await db.sequelize.sync()
-            .then(() => db.Event.create({
+        const newEvent = await db.Event.create({
                     userId: req.session.user.id,
                     title: req.body.title,
                     detail: req.body.detail,
-                }).then(() => {
-                    res.redirect('/events');
                 }).catch((err) => {
                         const data = {
                             title: 'events',
@@ -52,8 +49,7 @@ module.exports = {
                             err: err,
                         }
                         res.render('layout', { layout_name: 'events/add', data });
-                    })
-            )
+                });
         //タグ作成およびイベントとの紐付け
         let tags = JSON.parse(req.body.tags);
         //tagの数だけ繰り返す
@@ -67,6 +63,8 @@ module.exports = {
             db.EventTag.create({
                 eventId: newEvent.id,
                 tagId: findTag[0].id,
+            }).then(() => {
+                res.redirect('/events');
             }).catch((err) => {
                 res.render('layout', { layout_name: 'error', title: 'ERROR', msg: err });
             })
@@ -131,6 +129,29 @@ module.exports = {
             res.render('layout', { layout_name: 'events/show', data });
         });
 
+    },
+    delete: async(req, res, next) => {
+        db.sequelize.sync()
+            .then(async() => {
+                const event_id = req.params.id;
+                await db.Event.destroy({
+                    where: { id: event_id }
+                })
+                return event_id;
+            }).then(async(event_id) => {
+                //イベント削除時に紐づいているタグと参加者情報の削除
+                await db.EventTag.destroy({
+                    where: { eventId: event_id }
+                })
+                await db.Join.destroy({
+                    where: { eventId: event_id }
+                })
+                return event_id;
+            }).then(() => {
+                res.redirect('/events');
+            }).catch((err) => {
+                res.render('layout', { layout_name: 'error', title: 'ERROR', msg: err });
+            });
     },
     join: async(req, res, next) => {
         //いいねがついているかを判定する。

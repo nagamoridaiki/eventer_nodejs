@@ -78,6 +78,9 @@
                         <input class="btn btn-success" type="submit" value="参加する">
                     </form>
                 <% } %>
+                <%if (data.event.userId == data.login.id) {%>
+                    <a href="/events/delete/<%= data.event.id %>" class="btn btn-primary">削除する</a>
+                <% } %>
     </div>
 
     <p class="h5"><a href="/events">＜＜掲示板リストに戻る</a></p>

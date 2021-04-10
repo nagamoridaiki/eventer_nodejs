@@ -12,6 +12,7 @@ router.post('/add', usersController.verifyJWT, eventsController.create);
 router.get('/show/:id', usersController.verifyJWT, eventsController.show);
 router.get('/edit/:id', usersController.verifyJWT, eventsController.edit);
 router.post('/update/:id', usersController.verifyJWT, eventsController.update);
+router.get('/delete/:id', usersController.verifyJWT, eventsController.delete);
 router.post('/join', usersController.verifyJWT, eventsController.join);
 
 
