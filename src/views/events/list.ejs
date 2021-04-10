@@ -35,26 +35,27 @@
                             </h5>
                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                             <% 
-                            hart_color = false;
-                            for(let n in data.content[i].User) { 
-                                if (data.content[i].User[n].id == data.login.id){
-                                    hart_color = true;
+                                hart_color = false;
+                                for(let n in data.content[i].User) { 
+                                    if (data.content[i].User[n].id == data.login.id){
+                                        hart_color = true;
+                                    };
                                 };
-                            };
-                                %>
-                                <%if (hart_color == true) {%>
-                                    <p>参加人数:参加してます
-                                        <%= data.content[i].User.length %>
-                                    </p>
-                                    <% } %>
-                                        <%if (hart_color == false) {%>
-                                            <p>参加人数:参加してません
-                                                <%= data.content[i].User.length %>
-                                            </p>
-                                            <% } %>
-
-
-                                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            %>
+                            <%if (hart_color == true) {%>
+                                <p>参加人数:参加してます
+                                    <%= data.content[i].User.length %>
+                                </p>
+                            <% } %>
+                            <%if (hart_color == false) {%>
+                                <p>参加人数:参加してません
+                                    <%= data.content[i].User.length %>
+                                </p>
+                            <% } %>
+                            
+                            <%if (data.content[i].userId == data.login.id) {%>
+                            <a href="events/edit/<%= data.content[i].id %>" class="btn btn-primary">編集する</a>
+                            <% } %>
                         </div>
                     </div>
                 </div>

@@ -24,6 +24,7 @@
                 <%= data.err.errors[i].message %>
             </li>
             <% }} %>
+                <form method="post" action="/events/update/<%= data.event.id %>">
                     <div class="row">
                         <div class="col-10  input-group">
                             <div class="input-group-prepend">
@@ -42,7 +43,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">本文</span>
                             </div>
-                            <textarea type="text" name="msg" class="form-control" rows="10"><%= data.event.detail %></textarea>
+                            <textarea type="text" name="detail" class="form-control" rows="10"><%= data.event.detail %></textarea>
                             <ul class="text-danger">
                                 <% if (data.err!=null) { for (let i in data.err.get("detail")) { %>
                                     <li>
@@ -63,21 +64,11 @@
                                 <% }} %>
                             </div>
                         </div>
+                        <div>
+                            <input type="submit" value="送信" class="btn btn-primary col-2">
+                        </div>
                     </div>
-                <%if (data.isJoin == true) {%>
-                    <form method="post" action="/events/join">
-                        <input type="hidden" name="userId" value="<%= data.login.id %>">
-                        <input type="hidden" name="eventId" value="<%= data.event.id %>">
-                        <input class="btn btn-primary" type="submit" value="参加しない">
-                    </form>
-                <% } %>
-                <%if (data.isJoin == false) {%>
-                    <form method="post" action="/events/join">
-                        <input type="hidden" name="userId" value="<%= data.login.id %>">
-                        <input type="hidden" name="eventId" value="<%= data.event.id %>">
-                        <input class="btn btn-success" type="submit" value="参加する">
-                    </form>
-                <% } %>
+                </form>
     </div>
 
     <p class="h5"><a href="/events">＜＜掲示板リストに戻る</a></p>

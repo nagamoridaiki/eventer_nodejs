@@ -10,6 +10,8 @@ router.get('/', usersController.verifyJWT, eventsController.index);
 router.get('/add', usersController.verifyJWT, eventsController.add);
 router.post('/add', usersController.verifyJWT, eventsController.create);
 router.get('/show/:id', usersController.verifyJWT, eventsController.show);
+router.get('/edit/:id', usersController.verifyJWT, eventsController.edit);
+router.post('/update/:id', usersController.verifyJWT, eventsController.update);
 router.post('/join', usersController.verifyJWT, eventsController.join);
 
 

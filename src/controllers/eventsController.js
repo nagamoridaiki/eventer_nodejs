@@ -43,6 +43,8 @@ module.exports = {
                     userId: req.session.user.id,
                     title: req.body.title,
                     detail: req.body.detail,
+                }).then(() => {
+                    res.redirect('/events');
                 }).catch((err) => {
                         const data = {
                             title: 'events',
@@ -68,6 +70,37 @@ module.exports = {
             }).catch((err) => {
                 res.render('layout', { layout_name: 'error', title: 'ERROR', msg: err });
             })
+        })
+    },
+    edit: async(req, res, next) => {
+        const EventId = req.params.id;
+        await db.Event.findOne({
+            where: {
+                id: EventId,
+            },
+            include: ['User', 'Tag'],
+        }).then(event => {
+            const data = {
+                title: 'Event/Edit',
+                login: req.session.user,
+                event: event,
+                err: null
+            }
+            res.render('layout', { layout_name: 'events/edit', data });
+        });
+    },
+    update: async(req, res, next) => {
+        const EventId = req.params.id;
+        await db.Event.update({
+            title: req.body.title,
+            detail: req.body.detail
+        }, {
+            where: { id: EventId, }
+        }).then(() => {
+            res.redirect('/events');
+        }).catch((err) => {
+            res.render('layout', { layout_name: 'error', title: 'ERROR', msg: '編集に失敗しました。' });
+            res.sendStatus(500)
         })
     },
     show: async(req, res, next) => {
