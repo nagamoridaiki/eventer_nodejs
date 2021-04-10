@@ -94,12 +94,41 @@ module.exports = {
             detail: req.body.detail
         }, {
             where: { id: EventId, }
-        }).then(() => {
-            res.redirect('/events');
         }).catch((err) => {
             res.render('layout', { layout_name: 'error', title: 'ERROR', msg: '編集に失敗しました。' });
             res.sendStatus(500)
         })
+        next();
+    },
+    tagUpdate: async(req, res, next) => {
+        const EventId = req.params.id;
+        const findEvent = await db.Event.findOne({
+            where: {
+                id: EventId,
+            },
+            include: ['User', 'Tag'],
+        });
+        await db.EventTag.destroy({
+            where: { eventId: EventId }
+        });
+        //タグ作成およびイベントとの紐付け
+        let tags = JSON.parse(req.body.tags);
+        //tagの数だけ繰り返す
+        tags.forEach(async function(tag, key ) {
+            let findTag = await db.Tag.findOrCreate({
+                where: { name: tag.value }
+            }).catch((err) => {
+                res.render('layout', { layout_name: 'error', title: 'ERROR', msg: err });
+            })
+            //イベントとの紐付け
+            db.EventTag.create({
+                eventId: findEvent.id,
+                tagId: findTag[0].id,
+            }).catch((err) => {
+                res.render('layout', { layout_name: 'error', title: 'ERROR', msg: err });
+            })
+        });
+        res.redirect('/events');
     },
     show: async(req, res, next) => {
         const EventId = req.params.id;
